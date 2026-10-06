@@ -1,0 +1,242 @@
+/* FONTES E ICONES */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
+
+/*  2. TAILWIND CSS VIA CDN IMPORT */
+@import url("https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css");
+
+/* 3. VARIÁVEIS DE TEMA (CUSTOM PROPERTIES) */
+:root {
+  --color-brand-gold: #D4AF37;
+  --color-brand-gold-light: #F3E5AB;
+  --color-brand-gold-dark: #AA820A;
+  --color-brand-dark-bg: #0e0e12;
+  --color-brand-card-bg: #16161c;
+  --color-brand-card-border: #282834;
+  --color-brand-muted: #9e9ea7;
+
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+}
+
+/*  4. ESTILOS GERAIS & SCROLLBAR */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-brand-dark-bg);
+  color: #f4f4f5;
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background-color: var(--color-brand-gold);
+  color: #000000;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-brand-dark-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a2a38;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-gold);
+}
+
+/*  5. CLASSES DE MAPEAMENTO DO TEMA DA BARBEARIA */
+
+/* CORES DE FUNDO */
+.bg-brand-darkBg { background-color: var(--color-brand-dark-bg) !important; }
+.bg-brand-cardBg { background-color: var(--color-brand-card-bg) !important; }
+.bg-brand-gold { background-color: var(--color-brand-gold) !important; }
+.bg-brand-goldLight { background-color: var(--color-brand-gold-light) !important; }
+
+/* CORES DE TEXTO */
+.text-brand-gold { color: var(--color-brand-gold) !important; }
+.text-brand-goldLight { color: var(--color-brand-gold-light) !important; }
+.text-brand-goldDark { color: var(--color-brand-gold-dark) !important; }
+.text-brand-muted { color: var(--color-brand-muted) !important; }
+
+/* BORDAS */
+.border-brand-cardBorder { border-color: var(--color-brand-card-border) !important; }
+.border-brand-gold { border-color: var(--color-brand-gold) !important; }
+
+/* BORDAS COM OPACIDADE */
+.border-brand-gold\/20 { border-color: rgba(212, 175, 55, 0.2) !important; }
+.border-brand-gold\/30 { border-color: rgba(212, 175, 55, 0.3) !important; }
+.border-brand-gold\/40 { border-color: rgba(212, 175, 55, 0.4) !important; }
+.border-brand-gold\/50 { border-color: rgba(212, 175, 55, 0.5) !important; }
+.border-brand-gold\/60 { border-color: rgba(212, 175, 55, 0.6) !important; }
+
+/* HOVER EFECTS */
+.hover\:bg-brand-gold:hover { background-color: var(--color-brand-gold) !important; }
+.hover\:bg-brand-goldLight:hover { background-color: var(--color-brand-gold-light) !important; }
+.hover\:text-brand-gold:hover { color: var(--color-brand-gold) !important; }
+.hover\:border-brand-gold:hover { border-color: var(--color-brand-gold) !important; }
+.hover\:border-brand-gold\/50:hover { border-color: rgba(212, 175, 55, 0.5) !important; }
+
+/* TIPOGRAFIA */
+.font-serif { font-family: var(--font-serif) !important; }
+.font-sans { font-family: var(--font-sans) !important; }
+
+/* SOMBRAS CUSTOMIZADAS */
+.shadow-brand-gold\/10 { box-shadow: 0 10px 15px -3px rgba(212, 175, 55, 0.1), 0 4px 6px -4px rgba(212, 175, 55, 0.1) !important; }
+.shadow-brand-gold\/15 { box-shadow: 0 10px 15px -3px rgba(212, 175, 55, 0.15), 0 4px 6px -4px rgba(212, 175, 55, 0.15) !important; }
+.shadow-brand-gold\/20 { box-shadow: 0 10px 15px -3px rgba(212, 175, 55, 0.2), 0 4px 6px -4px rgba(212, 175, 55, 0.2) !important; }
+
+.form-control {
+  width: 100%;
+  border: 1px solid var(--color-brand-card-border);
+  border-radius: 0.5rem;
+  background: #0a0a0d;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  font-size: 0.875rem;
+}
+
+.form-control:focus {
+  outline: 2px solid transparent;
+  border-color: var(--color-brand-gold);
+}
+
+.primary-button,
+.secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.primary-button {
+  background: var(--color-brand-gold);
+  color: #000;
+}
+
+.primary-button:hover:not(:disabled) {
+  background: var(--color-brand-gold-light);
+}
+
+.primary-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.secondary-button {
+  border: 1px solid var(--color-brand-card-border);
+  background: #0a0a0d;
+  color: #e4e4e7;
+}
+
+.secondary-button:hover {
+  border-color: var(--color-brand-gold);
+  color: var(--color-brand-gold);
+}
+
+.account-tab {
+  border-color: var(--color-brand-card-border);
+  color: #d4d4d8;
+}
+
+.account-tab.active {
+  border-color: var(--color-brand-gold);
+  background: rgba(212, 175, 55, 0.12);
+  color: var(--color-brand-gold);
+}
+
+.slot-btn {
+  border: 1px solid var(--color-brand-card-border);
+  border-radius: 0.375rem;
+  background: #0a0a0d;
+  padding: 0.5rem;
+  color: #d4d4d8;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.slot-btn:hover,
+.slot-btn.selected {
+  border-color: var(--color-brand-gold);
+  background: var(--color-brand-gold);
+  color: #000;
+}
+
+.admin-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.375rem;
+  text-align: center;
+}
+
+.calendar-weekdays {
+  margin-bottom: 0.5rem;
+  color: var(--color-brand-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.calendar-day,
+.calendar-empty {
+  display: flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+}
+
+.calendar-day {
+  position: relative;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #e4e4e7;
+}
+
+.calendar-day:hover,
+.calendar-day.selected {
+  border-color: var(--color-brand-gold);
+  color: var(--color-brand-gold);
+}
+
+.calendar-day.has-appointments::after {
+  position: absolute;
+  right: 0.3rem;
+  bottom: 0.2rem;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: var(--color-brand-gold);
+  content: "";
+}
+
+.appointment-card {
+  border: 1px solid var(--color-brand-card-border);
+  border-radius: 0.75rem;
+  background: #0a0a0d;
+  padding: 1rem;
+}
+
+.message-error {
+  border-color: #9f3a38 !important;
+  background: rgba(153, 27, 27, 0.15);
+  color: #fecaca !important;
+}
+
+.message-success {
+  border-color: rgba(212, 175, 55, 0.4) !important;
+  background: rgba(212, 175, 55, 0.08);
+  color: #f4f4f5 !important;
+}
