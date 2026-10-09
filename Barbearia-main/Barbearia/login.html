@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="script.js" defer></script>
+    <title>Login - Barbearia Pente Fino</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            gold: '#D4AF37',
+                            goldLight: '#F3E5AB',
+                            goldDark: '#AA820A',
+                            darkBg: '#0e0e12',
+                            cardBg: '#16161c',
+                            cardBorder: '#282834',
+                            muted: '#9e9ea7'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-brand-darkBg text-zinc-100 font-sans selection:bg-brand-gold selection:text-black">
+    <header class="bg-brand-darkBg/90 backdrop-blur-md border-b border-brand-cardBorder">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <img src="assets/image.png" alt="Logo Barbearia Pente Fino" class="h-16 w-16 rounded-full border border-brand-gold/50 bg-black p-1 object-contain shadow-lg shadow-brand-gold/20 group-hover:scale-105 transition-transform">
+                <div>
+                    <span class="font-serif text-lg tracking-wider text-brand-gold font-bold block uppercase leading-tight">Barbearia Pente Fino</span>
+                    <span class="text-[10px] text-brand-muted tracking-[0.25em] uppercase">Desde 2018 • Tradição</span>
+                </div>
+            </a>
+            <a href="index.html" class="inline-flex items-center gap-2 text-sm font-semibold text-zinc-300 hover:text-brand-gold transition-colors">
+                <span class="material-symbols-outlined text-base">arrow_back</span>
+                Voltar à página principal
+            </a>
+        </div>
+    </header>
+
+    <main class="py-16">
+        <section id="conta" class="max-w-3xl mx-auto px-6">
+            <div class="text-center mb-8">
+                <span class="text-xs font-bold text-brand-gold uppercase tracking-[0.2em]">Sua conta</span>
+                <h1 class="font-serif text-3xl font-bold text-white mt-2">Entre ou cadastre-se</h1>
+                <p class="text-brand-muted text-sm mt-2">É necessário ter uma conta para reservar um horário.</p>
+            </div>
+            <div id="accountStatus" class="hidden mb-5 rounded-lg border border-brand-gold/40 bg-brand-cardBg p-4 text-sm text-zinc-200" role="status"></div>
+            <div id="accountForms" class="bg-brand-cardBg border border-brand-cardBorder rounded-2xl p-6 sm:p-8">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6" role="tablist" aria-label="Acesso à conta">
+                    <button type="button" role="tab" aria-selected="true" class="account-tab active rounded-lg border px-4 py-3 text-sm font-semibold" data-account-tab="login">Cliente</button>
+                    <button type="button" role="tab" aria-selected="false" class="account-tab rounded-lg border px-4 py-3 text-sm font-semibold" data-account-tab="admin">Administrador</button>
+                    <button type="button" role="tab" aria-selected="false" class="account-tab rounded-lg border px-4 py-3 text-sm font-semibold" data-account-tab="register">Criar conta</button>
+                </div>
+                <form id="loginForm" class="space-y-4">
+                    <h2 id="loginHeading" class="font-serif text-xl font-bold text-white">Entrar como cliente</h2>
+                    <div>
+                        <label for="loginEmail" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">E-mail</label>
+                        <input id="loginEmail" name="email" type="email" autocomplete="email" required class="form-control">
+                    </div>
+                    <div>
+                        <label for="loginPassword" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">Senha</label>
+                        <input id="loginPassword" name="password" type="password" autocomplete="current-password" required class="form-control">
+                    </div>
+                    <button class="primary-button w-full" type="submit">Entrar</button>
+                    <p id="loginHelp" class="text-xs text-brand-muted">Use o e-mail e a senha da sua conta de cliente.</p>
+                </form>
+                <form id="registerForm" class="hidden space-y-4">
+                    <div>
+                        <label for="registerName" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">Nome completo</label>
+                        <input id="registerName" name="name" type="text" autocomplete="name" minlength="2" maxlength="100" required class="form-control">
+                    </div>
+                    <div>
+                        <label for="registerEmail" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">E-mail</label>
+                        <input id="registerEmail" name="email" type="email" autocomplete="email" maxlength="254" required class="form-control">
+                    </div>
+                    <div>
+                        <label for="registerPhone" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">Telefone / WhatsApp</label>
+                        <input id="registerPhone" name="phone" type="tel" autocomplete="tel" minlength="8" maxlength="20" required class="form-control">
+                    </div>
+                    <div>
+                        <label for="registerPassword" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">Senha (mínimo 8 caracteres)</label>
+                        <input id="registerPassword" name="password" type="password" autocomplete="new-password" minlength="8" required class="form-control">
+                    </div>
+                    <button class="primary-button w-full" type="submit">Criar conta</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="adminPanel" class="hidden py-16">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+                    <div>
+                        <span class="text-xs font-bold text-brand-gold uppercase tracking-[0.2em]">Área restrita</span>
+                        <h2 class="font-serif text-3xl font-bold text-white mt-2">Calendário do administrador</h2>
+                        <p class="text-brand-muted text-sm mt-2">Os novos agendamentos aparecem aqui automaticamente.</p>
+                    </div>
+                    <button id="notificationPermission" type="button" class="secondary-button">Ativar notificações</button>
+                </div>
+                <div id="adminNotice" class="hidden mb-5 rounded-lg border border-brand-gold/40 bg-brand-cardBg p-4 text-sm text-zinc-200" role="status"></div>
+                <div class="grid lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-5 bg-brand-cardBg border border-brand-cardBorder rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-5">
+                            <button id="calendarPrevious" type="button" class="secondary-button" aria-label="Mês anterior">‹</button>
+                            <h3 id="calendarHeading" class="font-serif text-xl font-bold text-white" aria-live="polite"></h3>
+                            <button id="calendarNext" type="button" class="secondary-button" aria-label="Próximo mês">›</button>
+                        </div>
+                        <div class="admin-calendar-grid calendar-weekdays" aria-hidden="true">
+                            <span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Dom</span>
+                        </div>
+                        <div id="adminCalendar" class="admin-calendar-grid" role="grid" aria-label="Dias com agendamentos"></div>
+                    </div>
+                    <div class="lg:col-span-7 bg-brand-cardBg border border-brand-cardBorder rounded-2xl p-6">
+                        <h3 id="appointmentsHeading" class="font-serif text-xl font-bold text-white mb-5">Agendamentos</h3>
+                        <div id="adminAppointments" class="space-y-3" aria-live="polite"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="script.js" defer></script>
+    
+    <title>Barbearia Pente Fino - Tradição & Maestria</title>
+
+    <!-- Fontes Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Google Material Symbols -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            gold: '#D4AF37',
+                            goldLight: '#F3E5AB',
+                            goldDark: '#AA820A',
+                            darkBg: '#0e0e12',
+                            cardBg: '#16161c',
+                            cardBorder: '#282834',
+                            muted: '#9e9ea7'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- CSS Customizado -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-brand-darkBg text-zinc-100 font-sans selection:bg-brand-gold selection:text-black">
+
+    <!-- Header & Navbar -->
+    <header class="fixed top-0 left-0 w-full bg-brand-darkBg/90 backdrop-blur-md border-b border-brand-cardBorder z-50 transition-all">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-3 group">
+                <img src="assets/image.png" alt="Logo Barbearia Pente Fino" class="h-16 w-16 rounded-full border border-brand-gold/50 bg-black p-1 object-contain shadow-lg shadow-brand-gold/20 group-hover:scale-105 transition-transform">
+                <div>
+                    <span class="font-serif text-lg tracking-wider text-brand-gold font-bold block uppercase leading-tight">Barbearia Pente Fino</span>
+                    <span class="text-[10px] text-brand-muted tracking-[0.25em] uppercase">Desde 2018 • Tradição</span>
+                </div>
+            </a>
+
+            <!-- Menu Desktop -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-300">
+                <a href="#inicio" class="hover:text-brand-gold transition-colors">Início</a>
+                <a href="#servicos" class="hover:text-brand-gold transition-colors">Serviços & Preços</a>
+                <a href="#agendamento" class="hover:text-brand-gold transition-colors">Agendamento</a>
+                <a href="login.html" class="hover:text-brand-gold transition-colors">Login</a>
+            </nav>
+
+            <!-- Botão Agendar -->
+            <div class="flex items-center gap-4">
+                <a href="login.html" class="md:hidden text-sm font-semibold text-zinc-300 hover:text-brand-gold transition-colors">Login</a>
+                <a href="#agendamento" class="inline-flex items-center gap-2 bg-brand-gold hover:bg-brand-goldLight text-black font-semibold text-sm px-5 py-2.5 rounded-full transition-all duration-300 transform hover:scale-[1.02] shadow-lg shadow-brand-gold/10">
+                    <span class="material-symbols-outlined text-base">calendar_month</span>
+                    <span>Agendar Horário</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="pt-36 pb-20 relative overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.08),transparent_50%)] pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-12 gap-12 items-center">
+            <div class="md:col-span-7 space-y-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-cardBg border border-brand-gold/30 text-brand-gold text-xs font-semibold tracking-wide">
+                    <span class="w-1.5 h-1.5 rounded-full bg-brand-gold animate-pulse"></span>
+                    TRADIÇÃO VIVA DESDE 2018
+                </div>
+                <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
+                    A Tradição do <span class="italic text-brand-gold font-normal">Corte Perfeito</span>, o Cuidado que Você Merece.
+                </h1>
+                <p class="text-brand-muted text-base sm:text-lg max-w-xl leading-relaxed">
+                    Desde 2018 resgatando o cuidado masculino com excelência, nossa barbearia combina atendimento personalizado e produtos de altíssima qualidade em um ambiente exclusivo, feito para o homem exigente                </p>
+                <div class="flex flex-wrap items-center gap-4 pt-2">
+                    <a href="#agendamento" class="bg-brand-gold hover:bg-brand-goldLight text-black font-semibold px-7 py-3.5 rounded-lg shadow-xl shadow-brand-gold/20 flex items-center gap-2 transition-transform hover:scale-105">
+                        <span class="material-symbols-outlined">event_available</span>
+                        Agendar Horário Online
+                    </a>
+                    <a href="#servicos" class="border border-zinc-700 hover:border-brand-gold text-zinc-200 hover:text-brand-gold px-6 py-3.5 rounded-lg transition-colors flex items-center gap-2">
+                        Conhecer Serviços
+                        <span class="material-symbols-outlined text-sm">arrow_downward</span>
+                    </a>
+                </div>
+
+                <!-- Estatísticas Rápidas -->
+                <div class="pt-8 border-t border-brand-cardBorder/60 grid grid-cols-3 gap-6">
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-bold text-white font-serif">+15.000</div>
+                        <div class="text-xs text-brand-muted uppercase tracking-wider mt-1">Clientes Atendidos</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-bold text-brand-gold font-serif">4.9 ★</div>
+                        <div class="text-xs text-brand-muted uppercase tracking-wider mt-1">Avaliação Google</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-bold text-white font-serif">6 Anos</div>
+                        <div class="text-xs text-brand-muted uppercase tracking-wider mt-1">Referência na Cidade</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Galeria da Barbearia -->
+            <div class="md:col-span-5">
+                <div class="relative mx-auto max-w-lg">
+                    <div class="grid grid-cols-2 gap-4">
+
+                        <div class="col-span-2 relative overflow-hidden rounded-3xl border border-brand-gold/30 bg-black/50 shadow-2xl ring-1 ring-white/5">
+                            <img src="assets/hero-barbearia-interior.png" alt="Interior da barbearia" class="aspect-square w-full object-cover object-center" />
+                        </div>
+
+                    </div>
+                    <div class="absolute -left-4 top-8 rounded-full border border-brand-gold/40 bg-brand-darkBg/85 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-gold shadow-lg backdrop-blur-sm">
+                        Desde 2018
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catálogo Oficial de Serviços & Preços -->
+    <section id="servicos" class="py-24 bg-[#121217] relative border-t border-brand-cardBorder">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold text-brand-gold uppercase tracking-[0.2em] block mb-2">Catálogo Oficial de Procedimentos</span>
+                <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold">Serviços de Alta Precisão & Valores</h2>
+                <p class="text-brand-muted text-sm sm:text-base mt-4">Tabela completa e transparente com duração estimada e valor de cada procedimento executado com maestria.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Categoria 1: Cortes & Combos -->
+                <div class="bg-brand-cardBg rounded-2xl border border-brand-cardBorder p-7 flex flex-col justify-between hover:border-brand-gold/50 transition-all duration-300">
+                    <div>
+                        <div class="flex items-center gap-3 pb-6 border-b border-brand-cardBorder">
+                            <span class="material-symbols-outlined text-brand-gold text-2xl">content_cut</span>
+                            <div>
+                                <h3 class="text-xl font-serif font-bold text-white">Cortes & Combos</h3>
+                                <p class="text-xs text-brand-muted">Estilo, visagismo e combinações completas</p>
+                            </div>
+                        </div>
+                        <ul class="divide-y divide-zinc-800/80 mt-4 space-y-3">
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Combo Completo</h4>
+                                    <p class="text-xs text-brand-muted">Corte + Barba + Sobrancelha • 60 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 55,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Combo</h4>
+                                    <p class="text-xs text-brand-muted">Corte + Barba • 60 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 50,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Corte</h4>
+                                    <p class="text-xs text-brand-muted">Tradicional ou degradê na tesoura/máquina • 40 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 30,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Corte + Hair Design</h4>
+                                    <p class="text-xs text-brand-muted">Corte com desenho artístico freestyle • 60 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 35,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Corte + Sobrancelha</h4>
+                                    <p class="text-xs text-brand-muted">Alinhamento e definição na navalhete • 50 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 35,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Corte + Pigmentação</h4>
+                                    <p class="text-xs text-brand-muted">Acabamento e cobertura de falhas • 90 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 50,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Acabamento</h4>
+                                    <p class="text-xs text-brand-muted">Contorno e pezinho alinhado com navalhete • 20 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 10,00</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="#agendamento" class="mt-8 block text-center py-2.5 rounded-lg border border-brand-gold/40 text-brand-gold hover:bg-brand-gold hover:text-black font-semibold text-xs tracking-wider uppercase transition-colors">
+                        Agendar Corte ou Combo
+                    </a>
+                </div>
+
+                <!-- Categoria 2: Barba & Cuidados Especiais -->
+                <div class="bg-brand-cardBg rounded-2xl border-2 border-brand-gold/60 p-7 flex flex-col justify-between shadow-xl relative">
+                    <div class="absolute -top-3.5 right-6 bg-brand-gold text-black text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">
+                        Destaque
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-3 pb-6 border-b border-brand-cardBorder">
+                            <span class="material-symbols-outlined text-brand-gold text-2xl">spa</span>
+                            <div>
+                                <h3 class="text-xl font-serif font-bold text-white">Barba & Estética</h3>
+                                <p class="text-xs text-brand-muted">Barboterapia, toalhas quentes e cuidados</p>
+                            </div>
+                        </div>
+                        <ul class="divide-y divide-zinc-800/80 mt-4 space-y-3">
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Barba</h4>
+                                    <p class="text-xs text-brand-muted">Alinhamento e corte tradicional • 40 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 25,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Barba + Barboterapia</h4>
+                                    <p class="text-xs text-brand-muted">Toalha vaporizada e óleos essenciais • 30 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 30,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Barba + Sobrancelha</h4>
+                                    <p class="text-xs text-brand-muted">Harmonização completa do rosto • 30 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 30,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Pigmentação (Barba ou Cabelo)</h4>
+                                    <p class="text-xs text-brand-muted">Disfarce de falhas e fios brancos • 30 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 20,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Limpeza de Pele</h4>
+                                    <p class="text-xs text-brand-muted">Higienização facial e esfoliação profunda • 40 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 25,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Sobrancelha</h4>
+                                    <p class="text-xs text-brand-muted">Design e alinhamento na navalhete • 15 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 10,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Lavagem Capilar</h4>
+                                    <p class="text-xs text-brand-muted">Massagem relaxante no couro cabeludo • 30 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 15,00</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="#agendamento" class="mt-8 block text-center py-2.5 rounded-lg border border-brand-gold/40 text-brand-gold hover:bg-brand-gold hover:text-black font-semibold text-xs tracking-wider uppercase transition-colors">
+                        Agendar Barba & Cuidados
+                    </a>
+                </div>
+
+                <!-- Categoria 3: Químicas, Cores & Tratamentos -->
+                <div class="bg-brand-cardBg rounded-2xl border border-brand-cardBorder p-7 flex flex-col justify-between hover:border-brand-gold/50 transition-all duration-300">
+                    <div>
+                        <div class="flex items-center gap-3 pb-6 border-b border-brand-cardBorder">
+                            <span class="material-symbols-outlined text-brand-gold text-2xl">colorize</span>
+                            <div>
+                                <h3 class="text-xl font-serif font-bold text-white">Químicas & Cores</h3>
+                                <p class="text-xs text-brand-muted">Platinados, hidratação, botox e luzes</p>
+                            </div>
+                        </div>
+                        <ul class="divide-y divide-zinc-800/80 mt-4 space-y-3">
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Corte & Barba + Platinado/Luzes</h4>
+                                    <p class="text-xs text-brand-muted">Transformação completa do visual • 180 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 130,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Corte + Platinado / Luzes / Reflexo</h4>
+                                    <p class="text-xs text-brand-muted">Corte com descoloração total ou mechas • 180 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 100,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Luzes / Platinado / Reflexo</h4>
+                                    <p class="text-xs text-brand-muted">Procedimento de mechas ou global • 120 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 80,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Botox</h4>
+                                    <p class="text-xs text-brand-muted">Alinhamento e redução de frizz • 120 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 50,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Botox (Produto à parte)</h4>
+                                    <p class="text-xs text-brand-muted">Aplicação profissional qualificada • 120 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 25,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Coloração / Pigmentação (prod. à parte)</h4>
+                                    <p class="text-xs text-brand-muted">Aplicação de tinta/pigmento fornecido • 30 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 20,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Alisante (Produto à parte)</h4>
+                                    <p class="text-xs text-brand-muted">Relaxamento capilar profissional • 60 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 15,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Hidratação</h4>
+                                    <p class="text-xs text-brand-muted">Nutrição profunda dos fios • 30 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 15,00</span>
+                            </li>
+                            <li class="pt-3 flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-zinc-200">Matizador</h4>
+                                    <p class="text-xs text-brand-muted">Neutralização de tons amarelados • 10 min</p>
+                                </div>
+                                <span class="text-brand-gold font-bold font-serif">R$ 10,00</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="#agendamento" class="mt-8 block text-center py-2.5 rounded-lg border border-brand-gold/40 text-brand-gold hover:bg-brand-gold hover:text-black font-semibold text-xs tracking-wider uppercase transition-colors">
+                        Agendar Procedimento Químico
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Módulo de Agendamento Online -->
+    <section id="agendamento" class="py-24 bg-[#111116] border-t border-brand-cardBorder">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-12 gap-12">
+                <!-- Formulário -->
+                <div class="lg:col-span-7 bg-brand-cardBg border border-brand-cardBorder rounded-2xl p-8 sm:p-10 shadow-2xl">
+                    <div class="mb-8">
+                        <span class="text-xs font-bold text-brand-gold uppercase tracking-[0.2em] block mb-2">Reserva Imediata</span>
+                        <h2 class="font-serif text-3xl font-bold text-white">Agende Seu Momento Exclusivo</h2>
+                        <p class="text-brand-muted text-sm mt-2">Escolha o serviço, consulte o calendário e reserve um horário disponível.</p>
+                    </div>
+
+                    <form id="bookingForm" class="space-y-6">
+                        <div id="bookingNotice" class="hidden rounded-lg border p-4 text-sm" role="status" aria-live="polite"></div>
+                        <div id="bookingAccountPrompt" class="rounded-lg border border-brand-gold/40 bg-[#0a0a0d] p-4 text-sm text-zinc-300" role="status">
+                            Para agendar, <a href="login.html" class="font-semibold text-brand-gold underline">entre ou crie sua conta</a>.
+                        </div>
+
+                        <div>
+                            <label for="serviceSelect" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">Selecione o Serviço Desejado</label>
+                            <select id="serviceSelect" required class="service-select w-full border border-brand-cardBorder rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-gold transition-colors">
+                                <option value="" disabled selected>Clique para selecionar um procedimento...</option>
+                                <optgroup label="Cortes & Combos">
+                                    <option value="Combo Completo (Corte + Barba + Sobrancelha) - R$ 55,00 (60 min)">Combo Completo (Corte + Barba + Sobrancelha) — R$ 55,00 (60 min)</option>
+                                    <option value="Combo (Corte + Barba) - R$ 50,00 (60 min)">Combo (Corte + Barba) — R$ 50,00 (60 min)</option>
+                                    <option value="Corte - R$ 30,00 (40 min)">Corte — R$ 30,00 (40 min)</option>
+                                    <option value="Corte + Hair Design (Desenho) - R$ 35,00 (60 min)">Corte + Hair Design (Desenho) — R$ 35,00 (60 min)</option>
+                                    <option value="Corte + Sobrancelha - R$ 35,00 (50 min)">Corte + Sobrancelha — R$ 35,00 (50 min)</option>
+                                    <option value="Corte + Pigmentação - R$ 50,00 (90 min)">Corte + Pigmentação — R$ 50,00 (90 min)</option>
+                                    <option value="Acabamento - R$ 10,00 (20 min)">Acabamento — R$ 10,00 (20 min)</option>
+                                </optgroup>
+                                <optgroup label="Barba & Cuidados">
+                                    <option value="Barba - R$ 25,00 (40 min)">Barba — R$ 25,00 (40 min)</option>
+                                    <option value="Barba + Barboterapia - R$ 30,00 (30 min)">Barba + Barboterapia — R$ 30,00 (30 min)</option>
+                                    <option value="Barba + Sobrancelha - R$ 30,00 (30 min)">Barba + Sobrancelha — R$ 30,00 (30 min)</option>
+                                    <option value="Pigmentação (Barba ou Cabelo) - R$ 20,00 (30 min)">Pigmentação (Barba ou Cabelo) — R$ 20,00 (30 min)</option>
+                                    <option value="Limpeza de Pele - R$ 25,00 (40 min)">Limpeza de Pele — R$ 25,00 (40 min)</option>
+                                    <option value="Sobrancelha - R$ 10,00 (15 min)">Sobrancelha — R$ 10,00 (15 min)</option>
+                                    <option value="Lavagem Capilar - R$ 15,00 (30 min)">Lavagem Capilar — R$ 15,00 (30 min)</option>
+                                </optgroup>
+                                <optgroup label="Químicas & Cores">
+                                    <option value="Corte & Barba + Platinado / Luzes ou Reflexo - R$ 130,00 (180 min)">Corte & Barba + Platinado / Luzes ou Reflexo — R$ 130,00 (180 min)</option>
+                                    <option value="Corte + Platinado / Luzes ou Reflexo - R$ 100,00 (180 min)">Corte + Platinado / Luzes ou Reflexo — R$ 100,00 (180 min)</option>
+                                    <option value="Luzes / Platinado / Reflexo - R$ 80,00 (120 min)">Luzes / Platinado / Reflexo — R$ 80,00 (120 min)</option>
+                                    <option value="Botox - R$ 50,00 (120 min)">Botox — R$ 50,00 (120 min)</option>
+                                    <option value="Botox / Produto à parte - R$ 25,00 (120 min)">Botox / Produto à parte — R$ 25,00 (120 min)</option>
+                                    <option value="Coloração / Pigmentação (Produto à parte) - R$ 20,00 (30 min)">Coloração / Pigmentação (Produto à parte) — R$ 20,00 (30 min)</option>
+                                    <option value="Alisante / Produto à parte - R$ 15,00 (60 min)">Alisante / Produto à parte — R$ 15,00 (60 min)</option>
+                                    <option value="Hidratação - R$ 15,00 (30 min)">Hidratação — R$ 15,00 (30 min)</option>
+                                    <option value="Matizador - R$ 10,00 (10 min)">Matizador — R$ 10,00 (10 min)</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label id="bookingDatePrompt" class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">Dia do agendamento</label>
+                            <div class="relative">
+                                <input type="hidden" id="bookingDate">
+                                <button id="datePickerButton" type="button" class="form-control date-picker-button" aria-labelledby="bookingDatePrompt bookingDateLabel" aria-expanded="false" aria-controls="datePickerPanel">
+                                    <span id="bookingDateLabel">Selecione uma data</span>
+                                    <span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>
+                                </button>
+                                <div id="datePickerPanel" class="date-picker-panel hidden" role="dialog" aria-label="Escolha a data do agendamento">
+                                    <div class="date-picker-header">
+                                        <button id="datePickerPrevious" type="button" class="date-picker-nav" aria-label="Mês anterior">‹</button>
+                                        <h3 id="datePickerHeading" class="date-picker-heading" aria-live="polite"></h3>
+                                        <button id="datePickerNext" type="button" class="date-picker-nav" aria-label="Próximo mês">›</button>
+                                    </div>
+                                    <div class="date-picker-grid date-picker-weekdays" aria-hidden="true">
+                                        <span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Dom</span>
+                                    </div>
+                                    <div id="datePickerDays" class="date-picker-grid" role="grid"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">Horários disponíveis</label>
+                            <div class="grid grid-cols-3 sm:grid-cols-6 gap-2" id="timeSlots" aria-live="polite">
+                                <p class="col-span-full text-sm text-brand-muted">Escolha um serviço e um dia para consultar horários.</p>
+                            </div>
+                            <input type="hidden" id="selectedTime" required>
+                        </div>
+
+                        <button id="bookingSubmit" type="submit" disabled class="primary-button w-full">
+                            <span class="material-symbols-outlined text-lg">check_circle</span>
+                            Confirmar agendamento
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Informações & Localização -->
+                <div class="lg:col-span-5 flex flex-col justify-between space-y-8" id="contato">
+                    <div class="bg-brand-cardBg border border-brand-cardBorder rounded-2xl p-8 space-y-6">
+                        <h3 class="font-serif text-2xl font-bold text-white pb-4 border-b border-brand-cardBorder">Informações & Localização</h3>
+
+                        <div class="flex items-start gap-4">
+                            <span class="material-symbols-outlined text-brand-gold mt-1">pin_drop</span>
+                            <div>
+                                <h4 class="font-bold text-sm text-white">Endereço Nobre</h4>
+                                <p class="text-sm text-brand-muted mt-0.5">Rua Djalma Dutra ,177 - 53439-250 Janga / Paulista-PE <br> Estacionamento no local.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <span class="material-symbols-outlined text-brand-gold mt-1">alarm</span>
+                            <div>
+                                <h4 class="font-bold text-sm text-white">Horário de Funcionamento</h4>
+                                <p class="text-sm text-brand-muted mt-0.5">Seg • Ter • Qua • Sáb: 9:00 ás 19:00<br>Qui • Sex: 09:00 ás 20:00 <br> Domingo - FECHADO <br> Sábado - Por Ordem de chegada </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <span class="material-symbols-outlined text-brand-gold mt-1">call</span>
+                            <div>
+                                <h4 class="font-bold text-sm text-white">Telefone & Contato</h4>
+                                <p class="text-sm text-brand-muted mt-0.5"> WhatsApp: (55) 81 99722-4539<br>pentefino811@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="bg-black py-12 border-t border-brand-cardBorder text-zinc-400 text-xs">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <img src="assets/image.png" alt="" class="w-8 h-8 object-contain">
+                <span class="font-serif text-sm tracking-wider uppercase font-bold text-zinc-200">Barbearia Pente Fino</span>
+                <span class="text-zinc-600">|</span>
+                <span>Desde 2018</span>
+            </div>
+            <div>
+                <p>&copy; 2018–2026 Barbearia Pente Fino. Tradição, maestria e cuidado artesanal. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
