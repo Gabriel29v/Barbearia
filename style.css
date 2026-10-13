@@ -217,19 +217,21 @@ body {
 .service-select {
   color-scheme: dark;
   background-color: #0a0a0d;
+  font-size: 1rem;
 }
 
 .service-select optgroup {
   background: #16161c;
   color: var(--color-brand-gold-light);
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
 .service-select option {
   background: #16161c;
   color: #f4f4f5;
-  padding: 0.55rem 0.75rem;
+  padding: 0.7rem 0.75rem;
+  line-height: 1.5;
 }
 
 .service-select option:checked {

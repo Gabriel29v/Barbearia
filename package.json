@@ -1,0 +1,7 @@
+{
+  "name": "barbearia-pente-fino-site",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build-frontend.js"
+  }
+}

@@ -1,4 +1,5 @@
-﻿const API_BASE = '/api';
+const configuredApiUrl = (window.BARBER_API_BASE_URL || '').trim().replace(/\/+$/, '');
+const API_BASE = `${configuredApiUrl}/api`;
 const TOKEN_KEY = 'penteFinoSession';
 const slotsElement = document.getElementById('timeSlots');
 const dateInput = document.getElementById('bookingDate');
@@ -34,7 +35,7 @@ async function apiRequest(path, options = {}) {
     if (token) headers.set('Authorization', `Bearer ${token}`);
     const response = await fetch(`${API_BASE}${path}`, { ...options, headers });
     const payload = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(payload.error || 'NÃ£o foi possÃ­vel concluir a solicitaÃ§Ã£o.');
+    if (!response.ok) throw new Error(payload.error || 'Não foi possível concluir a solicitação.');
     return payload;
 }
 
@@ -59,7 +60,7 @@ function setAccountView(user) {
         const text = document.createElement('span');
         text.textContent = user.role === 'admin'
             ? `Administrador conectado: ${user.name} (${user.email}).`
-            : `OlÃ¡, ${user.name}! Agende abaixo usando sua conta (${user.email}).`;
+            : `Olá, ${user.name}! Agende abaixo usando sua conta (${user.email}).`;
         const logout = document.createElement('button');
         logout.type = 'button';
         logout.className = 'ml-3 font-semibold text-brand-gold underline';
@@ -80,7 +81,7 @@ async function logoutUser() {
     try {
         await apiRequest('/logout', { method: 'POST', body: '{}' });
     } catch (error) {
-        console.error('Falha ao encerrar a sessÃ£o:', error);
+        console.error('Falha ao encerrar a sessão:', error);
     }
     localStorage.removeItem(TOKEN_KEY);
     setAccountView(null);
@@ -167,11 +168,11 @@ async function loadAvailableTimes() {
     slotsElement.replaceChildren();
     resetTimeSelection();
     if (!dateInput.value || !serviceSelect.value) {
-        slotsElement.textContent = 'Escolha um serviÃ§o e um dia para consultar horÃ¡rios.';
+        slotsElement.textContent = 'Escolha um serviço e um dia para consultar horários.';
         return;
     }
 
-    slotsElement.textContent = 'Consultando horÃ¡rios...';
+    slotsElement.textContent = 'Consultando horários...';
     try {
         const query = new URLSearchParams({
             date: dateInput.value,
@@ -180,7 +181,7 @@ async function loadAvailableTimes() {
         const { slots } = await apiRequest(`/availability?${query}`);
         slotsElement.replaceChildren();
         if (slots.length === 0) {
-            slotsElement.textContent = 'NÃ£o hÃ¡ horÃ¡rios disponÃ­veis para este dia.';
+            slotsElement.textContent = 'Não há horários disponíveis para este dia.';
             return;
         }
         slots.forEach(time => {
@@ -226,7 +227,7 @@ async function submitBooking(event) {
         });
         const bookingMessage = result.emailSent
             ? 'Agendamento confirmado! Enviamos os detalhes para seu e-mail.'
-            : `Agendamento registrado, mas o e-mail nÃ£o foi enviado: ${result.emailMessage}`;
+            : `Agendamento registrado, mas o e-mail não foi enviado: ${result.emailMessage}`;
         showMessage(document.getElementById('bookingNotice'), bookingMessage, !result.emailSent);
         await loadAvailableTimes();
         document.getElementById('bookingNotice').scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -266,7 +267,7 @@ async function refreshAdminCalendar() {
         knownAppointmentIds = latestIds;
         if (newAppointments.length > 0 && 'Notification' in window && Notification.permission === 'granted') {
             newAppointments.forEach(appointment => new Notification('Novo agendamento', {
-                body: `${appointment.clientName} â€” ${appointment.service}, ${appointment.date} Ã s ${appointment.time}.`
+                body: `${appointment.clientName} — ${appointment.service}, ${appointment.date} às ${appointment.time}.`
             }));
         }
         firstAdminLoad = false;
@@ -299,7 +300,7 @@ function renderAdminCalendar(appointments) {
         button.classList.toggle('selected', selectedAdminDate === date);
         button.textContent = String(day);
         button.setAttribute('aria-label', appointmentDates.has(date)
-            ? `${day}: hÃ¡ agendamentos`
+            ? `${day}: há agendamentos`
             : String(day));
         button.setAttribute('aria-pressed', String(selectedAdminDate === date));
         button.addEventListener('click', () => {
@@ -318,7 +319,7 @@ function renderAppointmentsForDay(appointments, date) {
         .sort((a, b) => a.time.localeCompare(b.time));
     const parsedDate = new Date(`${date}T12:00:00`);
     document.getElementById('appointmentsHeading').textContent =
-        `Agendamentos â€” ${new Intl.DateTimeFormat('pt-BR', { dateStyle: 'long' }).format(parsedDate)}`;
+        `Agendamentos — ${new Intl.DateTimeFormat('pt-BR', { dateStyle: 'long' }).format(parsedDate)}`;
     container.replaceChildren();
     if (selected.length === 0) {
         container.textContent = 'Nenhum agendamento para este dia.';
@@ -329,10 +330,10 @@ function renderAppointmentsForDay(appointments, date) {
         card.className = 'appointment-card';
         const title = document.createElement('h4');
         title.className = 'font-semibold text-white';
-        title.textContent = `${appointment.time} â€” ${appointment.clientName}`;
+        title.textContent = `${appointment.time} — ${appointment.clientName}`;
         const detail = document.createElement('p');
         detail.className = 'text-sm text-brand-muted mt-1';
-        detail.textContent = `${appointment.service} Â· ${appointment.clientEmail} Â· ${appointment.clientPhone}`;
+        detail.textContent = `${appointment.service} · ${appointment.clientEmail} · ${appointment.clientPhone}`;
         card.append(title, detail);
         container.appendChild(card);
     });
@@ -390,8 +391,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
                 if (result.user.role !== loginMode) {
                     throw new Error(loginMode === 'admin'
-                        ? 'Essas credenciais nÃ£o pertencem Ã  conta do administrador.'
-                        : 'Essa Ã© uma conta de administrador. Selecione a aba Administrador para entrar.');
+                        ? 'Essas credenciais não pertencem à conta do administrador.'
+                        : 'Essa é uma conta de administrador. Selecione a aba Administrador para entrar.');
                 }
                 localStorage.setItem(TOKEN_KEY, result.token);
                 setAccountView(result.user);
@@ -441,13 +442,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
         document.getElementById('notificationPermission').addEventListener('click', async () => {
             if (!('Notification' in window)) {
-                showMessage(document.getElementById('adminNotice'), 'Este navegador nÃ£o oferece notificaÃ§Ãµes do sistema.', true);
+                showMessage(document.getElementById('adminNotice'), 'Este navegador não oferece notificações do sistema.', true);
                 return;
             }
             const permission = await Notification.requestPermission();
             showMessage(document.getElementById('adminNotice'), permission === 'granted'
-                ? 'NotificaÃ§Ãµes de novos agendamentos ativadas.'
-                : 'PermissÃ£o de notificaÃ§Ã£o nÃ£o concedida.', permission !== 'granted');
+                ? 'Notificações de novos agendamentos ativadas.'
+                : 'Permissão de notificação não concedida.', permission !== 'granted');
         });
     }
 
@@ -463,4 +464,3 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     if (dateInput) await loadAvailableTimes();
 });
-

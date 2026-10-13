@@ -18,9 +18,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.MailException;
+import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,6 +46,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -111,7 +115,9 @@ public class BarbeariaApplication {
     }
 
     public static void main(String[] args) throws IOException {
-        Files.createDirectories(Path.of("data"));
+        if (!environment("DATABASE_URL").startsWith("jdbc:postgresql:")) {
+            Files.createDirectories(Path.of("data"));
+        }
         SpringApplication.run(BarbeariaApplication.class, args);
     }
 
@@ -123,18 +129,23 @@ public class BarbeariaApplication {
                         "Configure ADMIN_EMAIL com um e-mail válido e ADMIN_PASSWORD com pelo menos 12 caracteres."
                 );
             }
-            jdbc.execute("PRAGMA journal_mode = WAL");
+            boolean postgres = Boolean.TRUE.equals(jdbc.execute((ConnectionCallback<Boolean>) connection ->
+                    "PostgreSQL".equalsIgnoreCase(connection.getMetaData().getDatabaseProductName())));
+            if (!postgres) {
+                jdbc.execute("PRAGMA journal_mode = WAL");
+            }
+            String binaryType = postgres ? "BYTEA" : "BLOB";
             jdbc.execute("""
                     CREATE TABLE IF NOT EXISTS customers (
                         id TEXT PRIMARY KEY,
                         name TEXT NOT NULL,
                         email TEXT NOT NULL UNIQUE,
                         phone TEXT NOT NULL,
-                        password_hash BLOB NOT NULL,
-                        password_salt BLOB NOT NULL,
+                        password_hash %s NOT NULL,
+                        password_salt %s NOT NULL,
                         created_at TEXT NOT NULL
                     )
-                    """);
+                    """.formatted(binaryType, binaryType));
             jdbc.execute("""
                     CREATE TABLE IF NOT EXISTS appointments (
                         id TEXT PRIMARY KEY,
@@ -148,6 +159,29 @@ public class BarbeariaApplication {
                     """);
             jdbc.execute("CREATE INDEX IF NOT EXISTS appointments_start_idx ON appointments(starts_at)");
         };
+    }
+
+    @Bean
+    WebMvcConfigurer corsConfigurer(@Value("${app.cors.allowed-origins}") String allowedOrigins) {
+        String[] origins = Arrays.stream(allowedOrigins.split(","))
+                .map(String::trim)
+                .filter(origin -> !origin.isEmpty())
+                .toArray(String[]::new);
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/api/**")
+                        .allowedOrigins(origins)
+                        .allowedMethods("GET", "POST", "OPTIONS")
+                        .allowedHeaders(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE)
+                        .maxAge(3600);
+            }
+        };
+    }
+
+    @GetMapping("/api/health")
+    public Map<String, String> health() {
+        return Map.of("status", "UP");
     }
 
     @GetMapping("/")
