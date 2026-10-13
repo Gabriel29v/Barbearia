@@ -115,7 +115,14 @@ public class BarbeariaApplication {
     }
 
     public static void main(String[] args) throws IOException {
-        if (!environment("DATABASE_URL").startsWith("jdbc:postgresql:")) {
+        String databaseUrl = environment("DATABASE_URL");
+        if ("render".equals(environment("DEPLOYMENT_ENV"))
+                && !databaseUrl.startsWith("jdbc:postgresql://")) {
+            throw new IllegalStateException(
+                    "No Render, configure DATABASE_URL no formato jdbc:postgresql://HOST:PORTA/postgres?sslmode=require."
+            );
+        }
+        if (!databaseUrl.startsWith("jdbc:postgresql://")) {
             Files.createDirectories(Path.of("data"));
         }
         SpringApplication.run(BarbeariaApplication.class, args);
