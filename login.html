@@ -62,6 +62,27 @@
                 <p class="text-brand-muted text-sm mt-2">É necessário ter uma conta para reservar um horário.</p>
             </div>
             <div id="accountStatus" class="hidden mb-5 rounded-lg border border-brand-gold/40 bg-brand-cardBg p-4 text-sm text-zinc-200" role="status"></div>
+            <section id="profilePanel" class="hidden mb-5 rounded-2xl border border-brand-cardBorder bg-brand-cardBg p-6 sm:p-8" aria-labelledby="profileHeading">
+                <h2 id="profileHeading" class="font-serif text-xl font-bold text-white mb-5">Meu perfil</h2>
+                <dl class="grid gap-4 text-sm sm:grid-cols-2">
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-wider text-brand-muted">Nome</dt>
+                        <dd id="profileName" class="mt-1 text-zinc-100"></dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-wider text-brand-muted">E-mail</dt>
+                        <dd id="profileEmail" class="mt-1 text-zinc-100"></dd>
+                    </div>
+                    <div id="profilePhoneField">
+                        <dt class="text-xs font-semibold uppercase tracking-wider text-brand-muted">Telefone / WhatsApp</dt>
+                        <dd id="profilePhone" class="mt-1 text-zinc-100"></dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-wider text-brand-muted">Tipo de conta</dt>
+                        <dd id="profileRole" class="mt-1 text-zinc-100"></dd>
+                    </div>
+                </dl>
+            </section>
             <div id="accountForms" class="bg-brand-cardBg border border-brand-cardBorder rounded-2xl p-6 sm:p-8">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6" role="tablist" aria-label="Acesso à conta">
                     <button type="button" role="tab" aria-selected="true" class="account-tab active rounded-lg border px-4 py-3 text-sm font-semibold" data-account-tab="login">Cliente</button>

@@ -215,7 +215,17 @@ public class BarbeariaApplication {
     @GetMapping("/api/me")
     public Map<String, Object> currentUser(HttpServletRequest request) {
         Session session = requireSession(request, null);
-        return Map.of("user", session.user());
+        if ("admin".equals(session.role())) {
+            return Map.of("user", session.user());
+        }
+        Map<String, Object> user = new LinkedHashMap<>(session.user());
+        String phone = jdbc.queryForObject(
+                "SELECT phone FROM customers WHERE id = ?",
+                String.class,
+                session.userId()
+        );
+        user.put("phone", phone);
+        return Map.of("user", user);
     }
 
     @GetMapping("/api/availability")

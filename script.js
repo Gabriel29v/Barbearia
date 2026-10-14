@@ -1,6 +1,7 @@
 const configuredApiUrl = (window.BARBER_API_BASE_URL || '').trim().replace(/\/+$/, '');
 const API_BASE = `${configuredApiUrl}/api`;
 const TOKEN_KEY = 'penteFinoSession';
+const LOGIN_NOTICE_KEY = 'penteFinoLoginNotice';
 const slotsElement = document.getElementById('timeSlots');
 const dateInput = document.getElementById('bookingDate');
 const serviceSelect = document.getElementById('serviceSelect');
@@ -49,8 +50,10 @@ function setAccountView(user) {
     const bookingPrompt = document.getElementById('bookingAccountPrompt');
     const adminPanel = document.getElementById('adminPanel');
     const customerTabs = document.getElementById('customerViewTabs');
+    const profilePanel = document.getElementById('profilePanel');
 
     if (accountForms) accountForms.classList.toggle('hidden', Boolean(user));
+    if (profilePanel) profilePanel.classList.toggle('hidden', !user);
     if (accountStatus) {
         accountStatus.replaceChildren();
         accountStatus.classList.toggle('hidden', !user);
@@ -69,14 +72,23 @@ function setAccountView(user) {
     if (accountStatus) {
         const text = document.createElement('span');
         text.textContent = user.role === 'admin'
-            ? `Administrador conectado: ${user.name} (${user.email}).`
-            : `Olá, ${user.name}! Agende abaixo usando sua conta (${user.email}).`;
+            ? `Sessão de administrador iniciada: ${user.name}.`
+            : `Sessão iniciada. Bem-vindo, ${user.name}!`;
         const logout = document.createElement('button');
         logout.type = 'button';
         logout.className = 'ml-3 font-semibold text-brand-gold underline';
         logout.textContent = 'Sair';
         logout.addEventListener('click', logoutUser);
         accountStatus.append(text, logout);
+    }
+
+    if (profilePanel) {
+        document.getElementById('profileName').textContent = user.name || '';
+        document.getElementById('profileEmail').textContent = user.email || '';
+        document.getElementById('profilePhone').textContent = user.phone || 'Não informado';
+        document.getElementById('profilePhoneField').classList.toggle('hidden', user.role !== 'customer');
+        document.getElementById('profileRole').textContent =
+            user.role === 'admin' ? 'Administrador' : 'Cliente';
     }
 
     if (user.role === 'admin' && adminPanel) {
@@ -455,6 +467,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
                 localStorage.setItem(TOKEN_KEY, result.token);
                 if (result.user.role === 'customer') {
+                    sessionStorage.setItem(LOGIN_NOTICE_KEY, 'Login efetuado com sucesso!');
                     window.location.assign('index.html');
                     return;
                 }
@@ -480,6 +493,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     })
                 });
                 localStorage.setItem(TOKEN_KEY, result.token);
+                sessionStorage.setItem(LOGIN_NOTICE_KEY, 'Conta criada e login efetuado com sucesso!');
                 window.location.assign('index.html');
             } catch (error) {
                 showMessage(document.getElementById('accountStatus'), error.message, true);
@@ -513,6 +527,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const token = localStorage.getItem(TOKEN_KEY);
+    const loginNotice = sessionStorage.getItem(LOGIN_NOTICE_KEY);
+    if (loginNotice) {
+        sessionStorage.removeItem(LOGIN_NOTICE_KEY);
+        const notice = document.getElementById('loginNotice');
+        if (notice) {
+            showMessage(notice, loginNotice);
+            window.setTimeout(() => notice.classList.add('hidden'), 5000);
+        }
+    }
     if (token) {
         try {
             const result = await apiRequest('/me');
