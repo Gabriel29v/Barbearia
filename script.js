@@ -35,7 +35,10 @@ async function apiRequest(path, options = {}) {
     if (token) headers.set('Authorization', `Bearer ${token}`);
     const response = await fetch(`${API_BASE}${path}`, { ...options, headers });
     const payload = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(payload.error || 'Não foi possível concluir a solicitação.');
+    if (!response.ok) {
+        throw new Error(payload.error
+            || `A API respondeu com HTTP ${response.status}, mas não enviou uma mensagem de erro. Confira os logs e a configuração do serviço.`);
+    }
     return payload;
 }
 
@@ -45,6 +48,8 @@ function setAccountView(user) {
     const accountStatus = document.getElementById('accountStatus');
     const bookingPrompt = document.getElementById('bookingAccountPrompt');
     const adminPanel = document.getElementById('adminPanel');
+    const customerLinks = document.querySelectorAll('[data-customer-link]');
+    const customerTabs = document.getElementById('customerViewTabs');
 
     if (accountForms) accountForms.classList.toggle('hidden', Boolean(user));
     if (accountStatus) {
@@ -53,8 +58,15 @@ function setAccountView(user) {
     }
     if (bookingPrompt) bookingPrompt.classList.toggle('hidden', Boolean(user && user.role === 'customer'));
     if (adminPanel) adminPanel.classList.toggle('hidden', !user || user.role !== 'admin');
+    customerLinks.forEach(link => link.classList.toggle('hidden', !user || user.role !== 'customer'));
+    if (customerTabs) customerTabs.classList.toggle('hidden', !user || user.role !== 'customer');
 
-    if (!user) return;
+    if (!user) {
+        document.getElementById('bookingForm')?.classList.remove('hidden');
+        document.getElementById('customerAppointmentsPanel')?.classList.add('hidden');
+        document.getElementById('customerAppointments')?.replaceChildren();
+        return;
+    }
 
     if (accountStatus) {
         const text = document.createElement('span');
@@ -216,7 +228,7 @@ async function submitBooking(event) {
 
     bookingSubmit.disabled = true;
     try {
-        const result = await apiRequest('/appointments', {
+        await apiRequest('/appointments', {
             method: 'POST',
             body: JSON.stringify({
                 service: serviceSelect.value,
@@ -225,10 +237,8 @@ async function submitBooking(event) {
                 duration: getServiceDuration()
             })
         });
-        const bookingMessage = result.emailSent
-            ? 'Agendamento confirmado! Enviamos os detalhes para seu e-mail.'
-            : `Agendamento registrado, mas o e-mail não foi enviado: ${result.emailMessage}`;
-        showMessage(document.getElementById('bookingNotice'), bookingMessage, !result.emailSent);
+        showMessage(document.getElementById('bookingNotice'),
+            'Agendamento confirmado! Você pode consultá-lo na aba Meus agendamentos.');
         await loadAvailableTimes();
         document.getElementById('bookingNotice').scrollIntoView({ behavior: 'smooth', block: 'center' });
     } catch (error) {
@@ -237,6 +247,53 @@ async function submitBooking(event) {
     } finally {
         bookingSubmit.disabled = !selectedTimeInput.value;
     }
+}
+
+async function loadCustomerAppointments() {
+    const container = document.getElementById('customerAppointments');
+    const notice = document.getElementById('customerAppointmentsNotice');
+    if (!container || !currentUser || currentUser.role !== 'customer') return;
+
+    notice.classList.add('hidden');
+    container.textContent = 'Carregando seus agendamentos...';
+    try {
+        const { appointments } = await apiRequest('/my/appointments');
+        container.replaceChildren();
+        if (appointments.length === 0) {
+            container.textContent = 'Você ainda não possui agendamentos.';
+            return;
+        }
+
+        appointments.forEach(appointment => {
+            const card = document.createElement('article');
+            card.className = 'appointment-card';
+            const title = document.createElement('h3');
+            title.className = 'font-semibold text-white';
+            const date = new Date(`${appointment.date}T12:00:00`);
+            title.textContent = `${new Intl.DateTimeFormat('pt-BR', { dateStyle: 'long' }).format(date)} às ${appointment.time}`;
+            const detail = document.createElement('p');
+            detail.className = 'text-sm text-brand-muted mt-1';
+            detail.textContent = `${appointment.service} · ${appointment.duration} minutos`;
+            card.append(title, detail);
+            container.appendChild(card);
+        });
+    } catch (error) {
+        container.replaceChildren();
+        showMessage(notice, error.message, true);
+    }
+}
+
+function switchCustomerView(tab) {
+    if (!currentUser || currentUser.role !== 'customer') return;
+    const showAppointments = tab === 'appointments';
+    document.getElementById('bookingForm').classList.toggle('hidden', showAppointments);
+    document.getElementById('customerAppointmentsPanel').classList.toggle('hidden', !showAppointments);
+    document.querySelectorAll('[data-customer-tab]').forEach(button => {
+        const active = button.dataset.customerTab === tab;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-selected', String(active));
+    });
+    if (showAppointments) loadCustomerAppointments();
 }
 
 function monthLabel(date) {
@@ -371,6 +428,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         serviceSelect.addEventListener('change', loadAvailableTimes);
         dateInput.addEventListener('change', loadAvailableTimes);
         document.getElementById('bookingForm').addEventListener('submit', submitBooking);
+        document.querySelectorAll('[data-customer-tab]').forEach(button => {
+            button.addEventListener('click', () => switchCustomerView(button.dataset.customerTab));
+        });
+        document.getElementById('refreshCustomerAppointments').addEventListener('click', loadCustomerAppointments);
+        document.querySelectorAll('[data-customer-link]').forEach(link => {
+            link.addEventListener('click', () => switchCustomerView('appointments'));
+        });
     }
 
     if (document.getElementById('loginForm')) {
@@ -395,11 +459,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                         : 'Essa é uma conta de administrador. Selecione a aba Administrador para entrar.');
                 }
                 localStorage.setItem(TOKEN_KEY, result.token);
+                if (result.user.role === 'customer') {
+                    window.location.assign('index.html');
+                    return;
+                }
                 setAccountView(result.user);
                 form.reset();
-                if (result.user.role === 'admin') {
-                    document.getElementById('adminPanel').scrollIntoView({ behavior: 'smooth' });
-                }
+                document.getElementById('adminPanel').scrollIntoView({ behavior: 'smooth' });
             } catch (error) {
                 showMessage(status, error.message, true);
             }
@@ -419,8 +485,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     })
                 });
                 localStorage.setItem(TOKEN_KEY, result.token);
-                setAccountView(result.user);
-                form.reset();
+                window.location.assign('index.html');
             } catch (error) {
                 showMessage(document.getElementById('accountStatus'), error.message, true);
             }

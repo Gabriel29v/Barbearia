@@ -63,11 +63,13 @@
                 <a href="#inicio" class="hover:text-brand-gold transition-colors">Início</a>
                 <a href="#servicos" class="hover:text-brand-gold transition-colors">Serviços & Preços</a>
                 <a href="#agendamento" class="hover:text-brand-gold transition-colors">Agendamento</a>
+                <a href="#agendamento" data-customer-link class="hidden hover:text-brand-gold transition-colors">Meus agendamentos</a>
                 <a href="login.html" class="hover:text-brand-gold transition-colors">Login</a>
             </nav>
 
             <!-- Botão Agendar -->
             <div class="flex items-center gap-4">
+                <a href="#agendamento" data-customer-link class="hidden md:hidden text-sm font-semibold text-zinc-300 hover:text-brand-gold transition-colors">Meus agendamentos</a>
                 <a href="login.html" class="md:hidden text-sm font-semibold text-zinc-300 hover:text-brand-gold transition-colors">Login</a>
                 <a href="#agendamento" class="inline-flex items-center gap-2 bg-brand-gold hover:bg-brand-goldLight text-black font-semibold text-sm px-5 py-2.5 rounded-full transition-all duration-300 transform hover:scale-[1.02] shadow-lg shadow-brand-gold/10">
                     <span class="material-symbols-outlined text-base">calendar_month</span>
@@ -380,6 +382,11 @@
                         <p class="text-brand-muted text-sm mt-2">Escolha o serviço, consulte o calendário e reserve um horário disponível.</p>
                     </div>
 
+                    <div id="customerViewTabs" class="hidden grid grid-cols-2 gap-3 mb-6" role="tablist" aria-label="Área do cliente">
+                        <button type="button" role="tab" aria-selected="true" data-customer-tab="booking" class="account-tab active rounded-lg border px-4 py-3 text-sm font-semibold">Agendar horário</button>
+                        <button type="button" role="tab" aria-selected="false" data-customer-tab="appointments" class="account-tab rounded-lg border px-4 py-3 text-sm font-semibold">Meus agendamentos</button>
+                    </div>
+
                     <form id="bookingForm" class="space-y-6">
                         <div id="bookingNotice" class="hidden rounded-lg border p-4 text-sm" role="status" aria-live="polite"></div>
                         <div id="bookingAccountPrompt" class="rounded-lg border border-brand-gold/40 bg-[#0a0a0d] p-4 text-sm text-zinc-300" role="status">
@@ -456,6 +463,15 @@
                             Confirmar agendamento
                         </button>
                     </form>
+
+                    <section id="customerAppointmentsPanel" class="hidden" aria-labelledby="customerAppointmentsHeading">
+                        <div class="flex items-center justify-between gap-4 mb-5">
+                            <h3 id="customerAppointmentsHeading" class="font-serif text-xl font-bold text-white">Meus agendamentos</h3>
+                            <button id="refreshCustomerAppointments" type="button" class="secondary-button">Atualizar</button>
+                        </div>
+                        <div id="customerAppointmentsNotice" class="hidden mb-4 rounded-lg border p-4 text-sm" role="status" aria-live="polite"></div>
+                        <div id="customerAppointments" class="space-y-3" aria-live="polite"></div>
+                    </section>
                 </div>
 
                 <!-- Informações & Localização -->

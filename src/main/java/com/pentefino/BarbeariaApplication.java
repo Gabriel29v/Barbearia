@@ -1,7 +1,5 @@
 package com.pentefino;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
@@ -15,9 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.MailException;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -116,12 +111,6 @@ public class BarbeariaApplication {
 
     public static void main(String[] args) throws IOException {
         String databaseUrl = environment("DATABASE_URL");
-        if ("render".equals(environment("DEPLOYMENT_ENV"))
-                && !databaseUrl.startsWith("jdbc:postgresql://")) {
-            throw new IllegalStateException(
-                    "No Render, configure DATABASE_URL no formato jdbc:postgresql://HOST:PORTA/postgres?sslmode=require."
-            );
-        }
         if (!databaseUrl.startsWith("jdbc:postgresql://")) {
             Files.createDirectories(Path.of("data"));
         }
@@ -293,6 +282,31 @@ public class BarbeariaApplication {
         return Map.of("appointments", appointments);
     }
 
+    @GetMapping("/api/my/appointments")
+    public Map<String, Object> customerAppointments(HttpServletRequest request) {
+        Session session = requireSession(request, "customer");
+        List<Map<String, Object>> appointments = jdbc.query(
+                """
+                SELECT id, service, duration, starts_at
+                FROM appointments
+                WHERE customer_id = ?
+                ORDER BY starts_at
+                """,
+                (row, index) -> {
+                    LocalDateTime start = LocalDateTime.parse(row.getString("starts_at"), DATABASE_DATE_TIME);
+                    Map<String, Object> appointment = new LinkedHashMap<>();
+                    appointment.put("id", row.getString("id"));
+                    appointment.put("service", row.getString("service"));
+                    appointment.put("duration", row.getInt("duration"));
+                    appointment.put("date", start.toLocalDate().toString());
+                    appointment.put("time", start.toLocalTime().toString());
+                    return appointment;
+                },
+                session.userId()
+        );
+        return Map.of("appointments", appointments);
+    }
+
     @PostMapping("/api/register")
     public ResponseEntity<Map<String, Object>> register(@RequestBody Map<String, Object> payload) {
         String name = cleanName(stringValue(payload, "name"));
@@ -436,22 +450,8 @@ public class BarbeariaApplication {
                 LocalDateTime.now().toString()
         );
 
-        boolean emailSent = false;
-        String emailMessage = "O agendamento está no calendário do administrador; o envio de e-mail precisa ser configurado.";
-        try {
-            sendConfirmationEmail(session.user(), service, start, duration);
-            emailSent = true;
-            emailMessage = "E-mail enviado.";
-        } catch (MailException | MessagingException | IllegalStateException | IOException exception) {
-            LOGGER.log(Level.SEVERE, "Falha ao enviar a confirmação do agendamento " + appointmentId, exception);
-            emailMessage = "Não foi possível enviar a confirmação. Verifique as configurações de e-mail da barbearia.";
-        }
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                "appointmentId", appointmentId,
-                "emailSent", emailSent,
-                "emailMessage", emailMessage
-        ));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Map.of("appointmentId", appointmentId));
     }
 
     private boolean hasConflict(LocalDateTime start, LocalDateTime end) {
@@ -462,71 +462,6 @@ public class BarbeariaApplication {
                 DATABASE_DATE_TIME.format(start)
         );
         return count != null && count > 0;
-    }
-
-    private void sendConfirmationEmail(Map<String, Object> user, String service, LocalDateTime start, int duration)
-            throws MessagingException, IOException {
-        String host = environment("SMTP_HOST");
-        String senderEmail = environment("SMTP_FROM_EMAIL");
-        if (host.isBlank() || senderEmail.isBlank()) {
-            throw new IllegalStateException("Configure SMTP_HOST e SMTP_FROM_EMAIL para habilitar o envio.");
-        }
-        senderEmail = normalizedEmail(senderEmail);
-        String security = environmentOrDefault("SMTP_SECURITY", "starttls").toLowerCase(Locale.ROOT);
-        if (!security.equals("starttls") && !security.equals("ssl")) {
-            throw new IllegalStateException("SMTP_SECURITY deve ser starttls ou ssl.");
-        }
-        String portText = environmentOrDefault("SMTP_PORT", security.equals("ssl") ? "465" : "587");
-        int port;
-        try {
-            port = Integer.parseInt(portText);
-        } catch (NumberFormatException exception) {
-            throw new IllegalStateException("SMTP_PORT deve ser uma porta numérica.");
-        }
-        String smtpUser = environment("SMTP_USER");
-        String smtpPassword = environment("SMTP_PASSWORD");
-        if (smtpUser.isBlank() != smtpPassword.isBlank()) {
-            throw new IllegalStateException("Configure SMTP_USER e SMTP_PASSWORD juntos.");
-        }
-
-        JavaMailSenderImpl sender = new JavaMailSenderImpl();
-        sender.setHost(host);
-        sender.setPort(port);
-        sender.setUsername(smtpUser);
-        sender.setPassword(smtpPassword);
-        sender.setDefaultEncoding(StandardCharsets.UTF_8.name());
-        sender.getJavaMailProperties().put("mail.smtp.auth", Boolean.toString(!smtpUser.isBlank()));
-        sender.getJavaMailProperties().put("mail.smtp.starttls.enable", Boolean.toString(security.equals("starttls")));
-        sender.getJavaMailProperties().put("mail.smtp.starttls.required", Boolean.toString(security.equals("starttls")));
-        sender.getJavaMailProperties().put("mail.smtp.ssl.enable", Boolean.toString(security.equals("ssl")));
-        sender.getJavaMailProperties().put("mail.smtp.connectiontimeout", "20000");
-        sender.getJavaMailProperties().put("mail.smtp.timeout", "20000");
-        sender.getJavaMailProperties().put("mail.smtp.writetimeout", "20000");
-
-        MimeMessage message = sender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, false, StandardCharsets.UTF_8.name());
-        String senderName = environmentOrDefault("SMTP_FROM_NAME", "Barbearia Pente Fino");
-        helper.setFrom(senderEmail, senderName);
-        helper.setTo(String.valueOf(user.get("email")));
-        helper.setSubject("Agendamento confirmado — Barbearia Pente Fino");
-        helper.setText("""
-                Olá, %s!
-
-                Seu agendamento na Barbearia Pente Fino foi registrado:
-                Serviço: %s
-                Data: %s
-                Horário: %s
-                Duração: %d minutos
-
-                Esperamos por você!
-                """.formatted(
-                user.get("name"),
-                service,
-                start.toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                start.toLocalTime(),
-                duration
-        ));
-        sender.send(message);
     }
 
     private Session requireSession(HttpServletRequest request, String requiredRole) {
