@@ -48,7 +48,6 @@ function setAccountView(user) {
     const accountStatus = document.getElementById('accountStatus');
     const bookingPrompt = document.getElementById('bookingAccountPrompt');
     const adminPanel = document.getElementById('adminPanel');
-    const customerLinks = document.querySelectorAll('[data-customer-link]');
     const customerTabs = document.getElementById('customerViewTabs');
 
     if (accountForms) accountForms.classList.toggle('hidden', Boolean(user));
@@ -58,7 +57,6 @@ function setAccountView(user) {
     }
     if (bookingPrompt) bookingPrompt.classList.toggle('hidden', Boolean(user && user.role === 'customer'));
     if (adminPanel) adminPanel.classList.toggle('hidden', !user || user.role !== 'admin');
-    customerLinks.forEach(link => link.classList.toggle('hidden', !user || user.role !== 'customer'));
     if (customerTabs) customerTabs.classList.toggle('hidden', !user || user.role !== 'customer');
 
     if (!user) {
@@ -432,9 +430,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             button.addEventListener('click', () => switchCustomerView(button.dataset.customerTab));
         });
         document.getElementById('refreshCustomerAppointments').addEventListener('click', loadCustomerAppointments);
-        document.querySelectorAll('[data-customer-link]').forEach(link => {
-            link.addEventListener('click', () => switchCustomerView('appointments'));
-        });
     }
 
     if (document.getElementById('loginForm')) {
